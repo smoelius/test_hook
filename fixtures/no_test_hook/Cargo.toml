@@ -1,0 +1,13 @@
+[package]
+name = "no_test_hook"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[lib]
+doctest = false
+
+[dev-dependencies]
+test_hook = { path = "../../test_hook" }
+
+[workspace]

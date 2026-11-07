@@ -1,0 +1,16 @@
+[package]
+name = "test_hook_macro"
+version = "0.1.0"
+authors = ["Samuel Moelius <sam@moeli.us>"]
+description = "Proc macros for `test_hook`"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/smoelius/test_hook"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "1.0"
+quote = "1.0"
+syn = { version = "3.0", features = ["full"] }

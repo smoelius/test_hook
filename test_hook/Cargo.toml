@@ -1,0 +1,19 @@
+[package]
+name = "test_hook"
+version = "0.1.0"
+authors = ["Samuel Moelius <sam@moeli.us>"]
+description = "Control how test executables are run"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/smoelius/test_hook"
+
+[dependencies]
+test_hook_macro = { version = "=0.1.0", path = "../macro" }
+
+[dev-dependencies]
+assert_cmd = "2.2"
+cargo_metadata = "0.23"
+regex = "1.13"
+tempfile = "3.27"
+toml = "1.2"
+walkdir = "2.5"

@@ -1,0 +1,13 @@
+[workspace]
+exclude = ["fixtures/*"]
+members = ["test_hook", "macro"]
+resolver = "2"
+
+[[workspace.metadata.dylint.libraries]]
+git = "https://github.com/trailofbits/dylint"
+pattern = [
+    "examples/general",
+    "examples/supplementary",
+    "examples/restriction/inconsistent_qualification",
+    "examples/restriction/non_topologically_sorted_functions",
+]
