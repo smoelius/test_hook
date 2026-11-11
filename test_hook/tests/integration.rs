@@ -15,7 +15,7 @@ fn additional_attrs() {
     assert!(stderr_normalized.contains(
         "\
 warning: unreachable `pub` item
-  --> src/lib.rs:12:9
+  --> tests/integration.rs:12:9
    |
 12 |         pub mod foo {}
    |         ---^^^^^^^^
@@ -24,13 +24,13 @@ warning: unreachable `pub` item
    |
    = help: or consider exporting it for use by other crates
 note: the lint level is defined here
-  --> src/lib.rs:9:12
+  --> tests/integration.rs:9:12
    |
  9 |     #[warn(unreachable_pub)]
    |            ^^^^^^^^^^^^^^^
 
 warning: unreachable `pub` item
-  --> src/lib.rs:18:9
+  --> tests/integration.rs:18:9
    |
 18 |         pub mod foo {}
    |         ---^^^^^^^^
@@ -39,13 +39,13 @@ warning: unreachable `pub` item
    |
    = help: or consider exporting it for use by other crates
 note: the lint level is defined here
-  --> src/lib.rs:16:12
+  --> tests/integration.rs:16:12
    |
 16 |     #[warn(unreachable_pub)]
    |            ^^^^^^^^^^^^^^^
 
-warning: `additional_attrs` (lib test) generated 2 warnings (run `cargo fix --lib -p \
-         additional_attrs --tests` to apply 2 suggestions)
+warning: `additional_attrs` (test \"integration\") generated 2 warnings (run `cargo fix --test \
+         \"integration\" -p additional_attrs` to apply 2 suggestions)
 ",
     ));
 }
@@ -74,7 +74,7 @@ fn child_aborts() {
     assert!(stderr_normalized.ends_with(
         "\
 test_hook: test executable terminated abnormally: signal: 6 (SIGABRT)
-error: test failed, to rerun pass `--lib`
+error: test failed, to rerun pass `--test integration`
 ",
     ));
 }
@@ -87,7 +87,7 @@ fn no_test_hook() {
     assert!(stderr_normalized.ends_with(
         "\
 error[E0425]: cannot find value `__test_hook__` in this scope
- --> src/lib.rs:5:5
+ --> tests/integration.rs:5:5
   |
 5 |     #[test]
   |     ^^^^^^^ not found in this scope
@@ -96,7 +96,7 @@ error[E0425]: cannot find value `__test_hook__` in this scope
          macro-backtrace for more info)
 
 For more information about this error, try `rustc --explain E0425`.
-error: could not compile `no_test_hook` (lib test) due to 1 previous error
+error: could not compile `no_test_hook` (test \"integration\") due to 1 previous error
 ",
     ));
 }
@@ -110,7 +110,7 @@ fn panic_in_test_hook() {
     assert!(stderr_normalized.ends_with(
         "\
 test_hook: test hook panicked: something went wrong
-error: test failed, to rerun pass `--lib`
+error: test failed, to rerun pass `--test integration`
 ",
     ));
 }
@@ -132,7 +132,7 @@ fn wrong_signature() {
     assert!(stderr_normalized.ends_with(
         "\
 error[E0308]: mismatched types
- --> src/lib.rs:7:8
+ --> tests/integration.rs:7:8
   |
 6 |     #[test_hook]
   |     ------------ expected because of the type of the constant
@@ -143,14 +143,18 @@ error[E0308]: mismatched types
                 found fn item `for<\'a> fn(&\'a Command) {test_hook}`
 
 For more information about this error, try `rustc --explain E0308`.
-error: could not compile `wrong_signature` (lib test) due to 1 previous error
+error: could not compile `wrong_signature` (test \"integration\") due to 1 previous error
 ",
     ));
 }
 
+/// Runs the fixture's `tests/integration.rs`. Building only that target prevents Cargo from
+/// compiling other targets in parallel. Otherwise, depending on timing, a compile error could be
+/// followed by "warning: build failed, waiting for other jobs to finish...", which would break the
+/// `ends_with` assertions for fixtures that intentionally fail to compile.
 fn test_fixture(name: &str) -> Assert {
     Command::new("cargo")
-        .arg("test")
+        .args(["test", "--test=integration"])
         .current_dir(Path::new("../fixtures").join(name))
         .assert()
 }
