@@ -21,6 +21,20 @@ fn test_hook(command: &mut Command) {
 
 To enable calling the hook, `test_hook` provides its own version of the `#[test]` attribute. The `test_hook` version must be used in place of the built-in attribute for every test in the executable.
 
+## Unit tests
+
+For unit tests, the hook must be placed in `src/lib.rs` or `src/main.rs`, outside of any module. If `test_hook` is a dev-dependency (as intended), the hook must also be preceded by `#[cfg(test)]`. Example:
+
+```rust
+#[cfg(test)]
+#[test_hook::test_hook]
+fn test_hook(command: &mut std::process::Command) {
+    // ...
+}
+```
+
+Like for integration tests, the `test_hook` version of the `#[test]` attribute must be used for every test in the executable, i.e., every unit test in the crate.
+
 ## Common errors
 
 - **``error[E0425]: cannot find value `__test_hook__` in the crate root``**

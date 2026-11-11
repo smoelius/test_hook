@@ -173,6 +173,16 @@ fn unconventional_name() {
 }
 
 #[test]
+fn unit_tests() {
+    let prefix = test_result_prefix(2);
+    let assert = cargo_test("unit_tests", "--lib").success();
+    let stdout = str::from_utf8(&assert.get_output().stdout).unwrap();
+    let lines = stdout.lines();
+    let count = lines.filter(|&line| line.starts_with(&prefix)).count();
+    assert_eq!(1, count);
+}
+
+#[test]
 fn wrong_signature() {
     let assert = test_fixture("wrong_signature").failure();
     let stderr = str::from_utf8(&assert.get_output().stderr).unwrap();
@@ -201,8 +211,12 @@ error: could not compile `wrong_signature` (test \"integration\") due to 1 previ
 /// followed by "warning: build failed, waiting for other jobs to finish...", which would break the
 /// `ends_with` assertions for fixtures that intentionally fail to compile.
 fn test_fixture(name: &str) -> Assert {
+    cargo_test(name, "--test=integration")
+}
+
+fn cargo_test(name: &str, arg: &str) -> Assert {
     Command::new("cargo")
-        .args(["test", "--test=integration"])
+        .args(["test", arg])
         .current_dir(Path::new("../fixtures").join(name))
         .assert()
 }
