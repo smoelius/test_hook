@@ -15,34 +15,34 @@ fn additional_attrs() {
     assert!(stderr_normalized.contains(
         "\
 warning: unreachable `pub` item
-  --> tests/integration.rs:12:9
+  --> tests/integration.rs:10:5
    |
-12 |         pub mod foo {}
-   |         ---^^^^^^^^
-   |         |
-   |         help: consider restricting its visibility: `pub(crate)`
+10 |     pub mod foo {}
+   |     ---^^^^^^^^
+   |     |
+   |     help: consider restricting its visibility: `pub(crate)`
    |
    = help: or consider exporting it for use by other crates
 note: the lint level is defined here
-  --> tests/integration.rs:9:12
+  --> tests/integration.rs:7:8
    |
- 9 |     #[warn(unreachable_pub)]
-   |            ^^^^^^^^^^^^^^^
+ 7 | #[warn(unreachable_pub)]
+   |        ^^^^^^^^^^^^^^^
 
 warning: unreachable `pub` item
-  --> tests/integration.rs:18:9
+  --> tests/integration.rs:16:5
    |
-18 |         pub mod foo {}
-   |         ---^^^^^^^^
-   |         |
-   |         help: consider restricting its visibility: `pub(crate)`
+16 |     pub mod foo {}
+   |     ---^^^^^^^^
+   |     |
+   |     help: consider restricting its visibility: `pub(crate)`
    |
    = help: or consider exporting it for use by other crates
 note: the lint level is defined here
-  --> tests/integration.rs:16:12
+  --> tests/integration.rs:14:8
    |
-16 |     #[warn(unreachable_pub)]
-   |            ^^^^^^^^^^^^^^^
+14 | #[warn(unreachable_pub)]
+   |        ^^^^^^^^^^^^^^^
 
 warning: `additional_attrs` (test \"integration\") generated 2 warnings (run `cargo fix --test \
          \"integration\" -p additional_attrs` to apply 2 suggestions)
@@ -87,10 +87,10 @@ fn no_test_hook() {
     assert!(stderr_normalized.ends_with(
         "\
 error[E0425]: cannot find value `__test_hook__` in this scope
- --> tests/integration.rs:5:5
+ --> tests/integration.rs:3:1
   |
-5 |     #[test]
-  |     ^^^^^^^ not found in this scope
+3 | #[test]
+  | ^^^^^^^ not found in this scope
   |
   = note: this error originates in the attribute macro `test` (in Nightly builds, run with -Z \
          macro-backtrace for more info)
@@ -132,12 +132,12 @@ fn wrong_signature() {
     assert!(stderr_normalized.ends_with(
         "\
 error[E0308]: mismatched types
- --> tests/integration.rs:7:8
+ --> tests/integration.rs:5:4
   |
-6 |     #[test_hook]
-  |     ------------ expected because of the type of the constant
-7 |     fn test_hook(_command: &Command) {}
-  |        ^^^^^^^^^ types differ in mutability
+4 | #[test_hook]
+  | ------------ expected because of the type of the constant
+5 | fn test_hook(_command: &Command) {}
+  |    ^^^^^^^^^ types differ in mutability
   |
   = note: expected fn pointer `for<\'a> fn(&\'a mut Command)`
                 found fn item `for<\'a> fn(&\'a Command) {test_hook}`

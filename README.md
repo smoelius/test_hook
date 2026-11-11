@@ -39,9 +39,9 @@ To enable calling the hook, `test_hook` provides its own version of the `#[test]
   running 3 tests
 
   running 3 tests
-  test tests::arg_was_added ... ok
-  test tests::current_dir_changed ... ok
-  test tests::environment_variable_was_set ... ok
+  test arg_was_added ... ok
+  test current_dir_changed ... ok
+  test environment_variable_was_set ... ok
   ```
 
 - **Every test in the executable must use `test_hook::test`.** Tests that use the built-in `#[test]` attribute may start before the hook runs and may be terminated before they finish.
