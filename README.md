@@ -4,7 +4,7 @@ Control how test executables are run
 
 ## Usage
 
-Import `test_hook::{test, test_hook}` and add the `test_hook` attribute to a function that takes a `&mut std::process::Command` as an argument. Before tests are run, the function will be called with a command to launch the test executable in a child process. The function can modify the command, e.g., by [adding arguments], [changing its working directory], or [adding] or [removing environment variables].
+In an integration test[^integration-test], import `test_hook::{test, test_hook}` and add the `test_hook` attribute to a function that takes a `&mut std::process::Command` as an argument at the crate root[^crate-root]. Before tests are run, the function will be called with a command to launch the test executable in a child process. The function can modify the command, e.g., by [adding arguments], [changing its working directory], or [adding] or [removing environment variables].
 
 ## Example
 
@@ -23,9 +23,13 @@ To enable calling the hook, `test_hook` provides its own version of the `#[test]
 
 ## Common errors
 
-- **``error[E0425]: cannot find value `__test_hook__` in this scope``**
+- **``error[E0425]: cannot find value `__test_hook__` in the crate root``**
 
-  Check that you imported the `test_hook::test_hook` attribute and applied it to a function.
+  Check that the `test_hook` attribute is applied to a function at the crate root.
+
+- **``error[E0428]: the name `__test_hook__` is defined multiple times``**
+
+  Check that the `test_hook` attribute is applied to only one function.
 
 - **`error[E0308]: mismatched types`**
 
@@ -53,6 +57,10 @@ To enable calling the hook, `test_hook` provides its own version of the `#[test]
 ## Credits
 
 The `test_hook` attribute's syntax was inspired by [`ctor`].
+
+[^integration-test]: That is, a file in the `tests` directory.
+
+[^crate-root]: That is, not inside a module.
 
 [`ctor`]: https://docs.rs/ctor/latest/ctor/
 [adding arguments]: https://doc.rust-lang.org/std/process/struct.Command.html#method.args

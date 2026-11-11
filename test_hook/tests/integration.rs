@@ -80,23 +80,71 @@ error: test failed, to rerun pass `--test integration`
 }
 
 #[test]
+fn multiple_test_hooks() {
+    let assert = test_fixture("multiple_test_hooks").failure();
+    let stderr = str::from_utf8(&assert.get_output().stderr).unwrap();
+    let stderr_normalized = stderr.replace('\\', "/");
+    assert!(stderr_normalized.ends_with(
+        "\
+error[E0428]: the name `__test_hook__` is defined multiple times
+ --> tests/integration.rs:7:1
+  |
+4 | #[test_hook]
+  | ------------ previous definition of the value `__test_hook__` here
+...
+7 | #[test_hook]
+  | ^^^^^^^^^^^^ `__test_hook__` redefined here
+  |
+  = note: `__test_hook__` must be defined only once in the value namespace of this module
+  = note: this error originates in the attribute macro `test_hook` (in Nightly builds, run with -Z \
+         macro-backtrace for more info)
+
+For more information about this error, try `rustc --explain E0428`.
+error: could not compile `multiple_test_hooks` (test \"integration\") due to 1 previous error
+",
+    ));
+}
+
+#[test]
 fn no_test_hook() {
     let assert = test_fixture("no_test_hook").failure();
     let stderr = str::from_utf8(&assert.get_output().stderr).unwrap();
     let stderr_normalized = stderr.replace('\\', "/");
     assert!(stderr_normalized.ends_with(
         "\
-error[E0425]: cannot find value `__test_hook__` in this scope
+error[E0425]: cannot find value `__test_hook__` in the crate root
  --> tests/integration.rs:3:1
   |
 3 | #[test]
-  | ^^^^^^^ not found in this scope
+  | ^^^^^^^ not found in the crate root
   |
   = note: this error originates in the attribute macro `test` (in Nightly builds, run with -Z \
          macro-backtrace for more info)
 
 For more information about this error, try `rustc --explain E0425`.
 error: could not compile `no_test_hook` (test \"integration\") due to 1 previous error
+",
+    ));
+}
+
+#[test]
+fn not_at_crate_root() {
+    let assert = test_fixture("not_at_crate_root").failure();
+    let stderr = str::from_utf8(&assert.get_output().stderr).unwrap();
+    let stderr_normalized = stderr.replace('\\', "/");
+    assert!(stderr_normalized.ends_with(
+        "\
+error[E0425]: cannot find value `__test_hook__` in the crate root
+ --> tests/integration.rs:8:5
+  |
+8 |     #[test]
+  |     ^^^^^^^ not found in the crate root
+  |
+  = note: this error originates in the attribute macro `test` (in Nightly builds, run with -Z \
+         macro-backtrace for more info)
+
+For more information about this error, try `rustc --explain E0425`.
+error: could not compile `not_at_crate_root` (test \"integration\") due to 1 previous error
 ",
     ));
 }

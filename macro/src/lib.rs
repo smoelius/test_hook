@@ -20,7 +20,7 @@ pub fn test(args: TokenStream, tokens: TokenStream) -> TokenStream {
         #[::core::prelude::v1::test]
         #(#attrs)*
         #vis #defaultness #sig {
-            ::test_hook::__call_test_hook(__test_hook__);
+            ::test_hook::__call_test_hook(crate::__test_hook__);
 
             #(#stmts)*
         }
