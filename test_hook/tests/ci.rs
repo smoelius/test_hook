@@ -4,7 +4,13 @@ use cargo_metadata::{
     semver::{Op, Version, VersionReq},
 };
 use regex::Regex;
-use std::{ffi::OsStr, fs::read_to_string, path::Path, process::Command, sync::LazyLock};
+use std::{
+    ffi::OsStr,
+    fs::{read_dir, read_to_string},
+    path::Path,
+    process::Command,
+    sync::LazyLock,
+};
 use tempfile::tempdir;
 use test_hook::{test, test_hook};
 use walkdir::WalkDir;
@@ -103,6 +109,19 @@ fn fmt() {
     let mut command = Command::new("cargo");
     command.args(["+nightly", "fmt", "--check"]);
     command.assert().success();
+
+    // The fixtures are excluded from the workspace, so check them separately.
+    for result in read_dir("fixtures").unwrap() {
+        let entry = result.unwrap();
+        let path = entry.path();
+        if !path.is_dir() {
+            continue;
+        }
+        let mut command = Command::new("cargo");
+        command.args(["+nightly", "fmt", "--check"]);
+        command.current_dir(path);
+        command.assert().success();
+    }
 }
 
 #[cfg_attr(windows, ignore = "`node` is not installed on Windows")]
