@@ -168,8 +168,9 @@ fn unconventional_name() {
     let prefix = test_result_prefix(1);
     let assert = test_fixture("unconventional_name").success();
     let stdout = str::from_utf8(&assert.get_output().stdout).unwrap();
-    let mut lines = stdout.lines();
-    assert!(lines.any(|line| line.starts_with(&prefix)));
+    let lines = stdout.lines();
+    let count = lines.filter(|&line| line.starts_with(&prefix)).count();
+    assert_eq!(1, count);
 }
 
 #[test]
