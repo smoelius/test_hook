@@ -72,7 +72,7 @@ jobs:
         run: cargo test
 
   all-checks:
-    needs: [test]
+    needs: [check-up-to-dateness, test]
 
     if: ${{ always() }}
 
