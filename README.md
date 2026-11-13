@@ -62,6 +62,19 @@ Like for integration tests, the `test_hook` version of the `#[test]` attribute m
   test environment_variable_was_set ... ok
   ```
 
+- **With `--test-threads=1`, a "test \<name> ... " line is left incomplete.** When tests run one at a time, [`libtest`] prints each test's name before running it and the result afterward. When `test_hook` is used, the first test causes a child process to be launched and the parent exits without printing the first test's result. E.g.:
+
+  ```
+  running 3 tests
+  test arg_was_added ...
+  running 3 tests
+  test arg_was_added ... ok
+  test current_dir_changed ... ok
+  test environment_variable_was_set ... ok
+  ```
+
+- **With [`cargo-nextest`], the hook is called once per test.** `cargo-nextest` runs each test in its own process.
+
 - **Every test in the executable must use `test_hook::test`.** Tests that use the built-in `#[test]` attribute may start before the hook runs and may be terminated before they finish.
 
 ## Alternatives considered
@@ -76,7 +89,9 @@ The `test_hook` attribute's syntax was inspired by [`ctor`].
 
 [^crate-root]: That is, not inside a module.
 
+[`cargo-nextest`]: https://nexte.st/
 [`ctor`]: https://docs.rs/ctor/latest/ctor/
+[`libtest`]: https://github.com/rust-lang/rust/tree/main/library/test
 [adding arguments]: https://doc.rust-lang.org/std/process/struct.Command.html#method.args
 [adding]: https://doc.rust-lang.org/std/process/struct.Command.html#method.env
 [changing its working directory]: https://doc.rust-lang.org/std/process/struct.Command.html#method.current_dir
