@@ -81,15 +81,6 @@ pub fn call_test_hook(test_hook: TestHook) {
     exit(code);
 }
 
-/// Reports an error and exits without returning to the test harness, so that a calling test
-/// marked `should_panic` cannot be considered successful.
-fn fail(message: &str) -> ! {
-    // smoelius: Write to `stderr()` directly rather than use `eprintln!`, whose output libtest
-    // captures.
-    let _ = writeln!(stderr(), "test_hook: {message}");
-    exit(ERROR_EXIT_CODE);
-}
-
 /// The returned `OsString` names an environment variable to indicate whether the current process is
 /// a child process. Tests should be run in the child only.
 fn test_hook_child_key(current_exe: &Path) -> OsString {
@@ -102,6 +93,15 @@ fn test_hook_child_key(current_exe: &Path) -> OsString {
     let mut key = OsString::from("TEST_HOOK_CHILD_");
     key.push(filename);
     key
+}
+
+/// Reports an error and exits without returning to the test harness, so that a calling test
+/// marked `should_panic` cannot be considered successful.
+fn fail(message: &str) -> ! {
+    // smoelius: Write to `stderr()` directly rather than use `eprintln!`, whose output libtest
+    // captures.
+    let _ = writeln!(stderr(), "test_hook: {message}");
+    exit(ERROR_EXIT_CODE);
 }
 
 fn enabled(key: &OsStr) -> bool {
