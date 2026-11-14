@@ -1,0 +1,4 @@
+args = ["test", "--test=integration"]
+
+[fs]
+cwd = "../../../fixtures/additional_attrs"
