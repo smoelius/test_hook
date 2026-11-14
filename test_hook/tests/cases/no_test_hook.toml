@@ -1,0 +1,5 @@
+args = ["test", "--test=integration"]
+status = "failed"
+
+[fs]
+cwd = "../../../fixtures/no_test_hook"

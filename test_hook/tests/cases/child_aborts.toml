@@ -1,0 +1,5 @@
+args = ["test", "--test=integration"]
+status.code = 101
+
+[fs]
+cwd = "../../../fixtures/child_aborts"

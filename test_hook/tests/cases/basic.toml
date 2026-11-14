@@ -1,0 +1,4 @@
+args = ["test", "--test=integration", "--", "--test-threads=1"]
+
+[fs]
+cwd = "../../../fixtures/basic"

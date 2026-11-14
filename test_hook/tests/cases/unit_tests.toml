@@ -1,0 +1,4 @@
+args = ["test", "--lib", "--", "--test-threads=1"]
+
+[fs]
+cwd = "../../../fixtures/unit_tests"

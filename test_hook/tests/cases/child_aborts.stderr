@@ -1,0 +1,3 @@
+...
+test_hook: test executable terminated abnormally: signal: 6 (SIGABRT)[..]
+error: test failed, to rerun pass `--test integration`

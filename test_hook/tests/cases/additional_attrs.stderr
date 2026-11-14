@@ -1,0 +1,33 @@
+...
+warning: unreachable `pub` item
+  --> tests/integration.rs:10:5
+   |
+10 |     pub mod foo {}
+   |     ---^^^^^^^^
+   |     |
+   |     help: consider restricting its visibility: `pub(crate)`
+   |
+   = help: or consider exporting it for use by other crates
+note: the lint level is defined here
+  --> tests/integration.rs:7:8
+   |
+ 7 | #[warn(unreachable_pub)]
+   |        ^^^^^^^^^^^^^^^
+
+warning: unreachable `pub` item
+  --> tests/integration.rs:16:5
+   |
+16 |     pub mod foo {}
+   |     ---^^^^^^^^
+   |     |
+   |     help: consider restricting its visibility: `pub(crate)`
+   |
+   = help: or consider exporting it for use by other crates
+note: the lint level is defined here
+  --> tests/integration.rs:14:8
+   |
+14 | #[warn(unreachable_pub)]
+   |        ^^^^^^^^^^^^^^^
+
+warning: `additional_attrs` (test "integration") generated 2 warnings (run `cargo fix --test "integration" -p additional_attrs` to apply 2 suggestions)
+...
