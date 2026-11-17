@@ -9,6 +9,9 @@ license = "MIT OR Apache-2.0"
 repository = "https://github.com/smoelius/test_hook"
 version = "0.1.0"
 
+[workspace.dependencies]
+test_hook_macro = { version = "=0.1.0", path = "macro" }
+
 [[workspace.metadata.dylint.libraries]]
 git = "https://github.com/trailofbits/dylint"
 pattern = [
